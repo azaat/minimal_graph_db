@@ -21,6 +21,7 @@ install:
 
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pygraphblas
   - conda activate test-environment
+  - conda install pygraphblas
 # command to run tests
 script:
   - pytest
