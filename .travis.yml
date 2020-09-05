@@ -3,7 +3,6 @@ python:
   - "3.8"
 # command to install dependencies
 install:
-  - pip install -r requirements.txt
 
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
@@ -21,6 +20,8 @@ install:
 
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pygraphblas pytest
   - conda activate test-environment
+  
+  - pip install -r requirements.txt
 # command to run tests
 script:
   - pytest
