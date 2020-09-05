@@ -1,1 +1,1 @@
-# formal_languages_course
+# SPbU Formal Languages Course assignments
