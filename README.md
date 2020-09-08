@@ -3,4 +3,4 @@
 
 ## Assignment 1
 
-Tests for library functions are in ```./tests/test_1```
+Basic tests for pyformlang and pygraphblas functions are in ```./tests/test_1```
