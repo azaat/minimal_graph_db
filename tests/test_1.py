@@ -1,4 +1,3 @@
-import pytest
 from pygraphblas import Matrix
 from pyformlang.finite_automaton import EpsilonNFA, State, Symbol
 
