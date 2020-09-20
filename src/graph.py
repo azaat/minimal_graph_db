@@ -1,4 +1,4 @@
-from pygraphblas import BOOL, Matrix
+from pygraphblas import BOOL, Matrix, lib
 
 
 class LabelGraph:

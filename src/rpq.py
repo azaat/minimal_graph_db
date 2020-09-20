@@ -1,4 +1,4 @@
-from pygraphblas import Matrix, BOOL
+from pygraphblas import Matrix, BOOL, lib
 from itertools import product
 from src.graph import LabelGraph
 
@@ -10,15 +10,18 @@ def perform_rpq(graph, regex_automaton, start_lst, end_lst):
     num_vert = 0
 
     # Getting intersection with kronecker product
-    for label in graph_dict:
+    for label in query_dict:
         tmp_graph_dict[label] = graph_dict[label].kronecker(query_dict[label])
         if num_vert == 0:
             num_vert = tmp_graph_dict[label].ncols
+
+    # To GrB matrix
+
     tmp = LabelGraph()
     tmp.graph_dict = tmp_graph_dict
     tmp.num_vert = num_vert
     result = tmp.to_GrB_matrix()
-    
+
     # Transform double index to single value
     def coord_to_index(coord):
         v_graph, v_regex = coord
@@ -38,7 +41,7 @@ def perform_rpq(graph, regex_automaton, start_lst, end_lst):
     # ).to_dfa()
 
     # Computing reachability
-    reachability_matrix_ = get_transitive_closure(result)
+    reachability_matrix_ = get_transitive_closure(result).select(lib.GxB_NONZERO)
     reachability_matrix = Matrix.sparse(BOOL, graph.num_vert, graph.num_vert)
     for v_i, v_j, _ in zip(*reachability_matrix_.to_lists()):
         if (v_i in start_states) and (v_j in final_states):
@@ -47,7 +50,7 @@ def perform_rpq(graph, regex_automaton, start_lst, end_lst):
             v_to = v_j // regex_automaton.num_vert
             # Debug output
             if (v_to in end_lst) and (v_from in start_lst):
-                print(f'Path to {v_to} from {v_from} exists')
+                #print(f'Path to {v_to} from {v_from} exists')
                 reachability_matrix[v_from, v_to] = True
     return reachability_matrix
 
