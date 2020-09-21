@@ -41,17 +41,19 @@ def perform_rpq(graph, regex_automaton, start_lst, end_lst):
     # ).to_dfa()
 
     # Computing reachability
+    print("Transitive closure\n")
     reachability_matrix_ = get_transitive_closure(result).select(lib.GxB_NONZERO)
+    print("Finished transitive closure\n")
     reachability_matrix = Matrix.sparse(BOOL, graph.num_vert, graph.num_vert)
-    for v_i, v_j, _ in zip(*reachability_matrix_.to_lists()):
+    print("Started r_m\n")
+
+    for v_i, v_j, _ in zip(*reachability_matrix_.select(lib.GxB_NONZERO).to_lists()):
         if (v_i in start_states) and (v_j in final_states):
             # Getting initial graph vertex from index in result matrix
             v_from = v_i // regex_automaton.num_vert
             v_to = v_j // regex_automaton.num_vert
             # Debug output
-            if (v_to in end_lst) and (v_from in start_lst):
-                #print(f'Path to {v_to} from {v_from} exists')
-                reachability_matrix[v_from, v_to] = True
+            reachability_matrix[v_from, v_to] = True
     return reachability_matrix
 
     #checksums = {}
@@ -63,5 +65,8 @@ def perform_rpq(graph, regex_automaton, start_lst, end_lst):
 
 def get_transitive_closure(matrix):
     for i in range(matrix.ncols):
+        old_nvals = matrix.nvals
         matrix += matrix @ matrix
+        if (matrix.nvals == old_nvals):
+            break
     return matrix
