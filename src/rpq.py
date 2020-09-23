@@ -3,7 +3,7 @@ from itertools import product
 from src.graph import LabelGraph
 
 
-def perform_rpq(graph, regex_automaton, start_lst, end_lst):
+def perform_rpq(graph, regex_automaton, start_lst, end_lst, use_tc_method_adj=False):
     query_dict = regex_automaton.to_GrB_matrix()
     graph_dict = graph.graph_dict
     tmp_graph_dict = {}
@@ -16,7 +16,6 @@ def perform_rpq(graph, regex_automaton, start_lst, end_lst):
             num_vert = tmp_graph_dict[label].ncols
 
     # To GrB matrix
-
     tmp = LabelGraph()
     tmp.graph_dict = tmp_graph_dict
     tmp.num_vert = num_vert
@@ -36,14 +35,10 @@ def perform_rpq(graph, regex_automaton, start_lst, end_lst):
         product(range(graph.num_vert), regex_automaton.final_states)
     ))
 
-    # result_dfa = MatrixAutomaton(
-    #     result, start_states, final_states
-    # ).to_dfa()
-
-    # Computing reachability
-    print("Transitive closure\n")
-    reachability_matrix_ = get_transitive_closure(result).select(lib.GxB_NONZERO)
-    print("Finished transitive closure\n")
+    if (not use_tc_method_adj):
+        reachability_matrix_ = get_transitive_closure(result).select(lib.GxB_NONZERO)
+    else:
+        reachability_matrix_ = get_transitive_closure_adj(result).select(lib.GxB_NONZERO)
     reachability_matrix = Matrix.sparse(BOOL, graph.num_vert, graph.num_vert)
     print("Started r_m\n")
 
@@ -54,14 +49,16 @@ def perform_rpq(graph, regex_automaton, start_lst, end_lst):
             v_to = v_j // regex_automaton.num_vert
             # Debug output
             reachability_matrix[v_from, v_to] = True
-    return reachability_matrix
+    return (reachability_matrix, reachability_matrix_.nvals)
 
-    #checksums = {}
-    #for label in tmp.graph_dict:
-    #    checksums[label] = tmp.graph_dict[label].nvals
-    #    print(f'{label} {tmp.graph_dict[label].nvals}')
-    #return checksums
-
+def get_transitive_closure_adj(matrix):
+    res = matrix.dup()
+    for i in range(matrix.ncols):
+        old_nvals = res.nvals
+        res += res @ matrix
+        if (res.nvals == old_nvals):
+            break
+    return res
 
 def get_transitive_closure(matrix):
     for i in range(matrix.ncols):
