@@ -8,7 +8,7 @@ from pyformlang.finite_automaton import DeterministicFiniteAutomaton
 class RegexAutomaton:
     def __init__(self, regex):
         enfa = Regex(regex).to_epsilon_nfa()
-        self.dfa = enfa.to_deterministic()
+        self.dfa = enfa.to_deterministic().minimize()
         states = self.dfa.states
         vertices = range(len(states))
         self.vert_dict = dict(zip(states, vertices))

@@ -32,3 +32,7 @@ optional arguments:
   ```
 
 Test with ```python3 -m pytest```
+
+## Assignment_3
+
+Experimental report can be found in Analysis.pdf. CSV files used in analysis are in ./query_benchmarks.

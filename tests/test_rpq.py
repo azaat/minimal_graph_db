@@ -19,7 +19,7 @@ def test_rpq():
         start_lst = list(range(graph.num_vert))
         end_lst = list(range(graph.num_vert))
 
-        res_matrix = perform_rpq(graph, regex_automaton, start_lst, end_lst)
+        res_matrix = perform_rpq(graph, regex_automaton, start_lst, end_lst, True)[0]
         reachability = set()
         with open(
             os.path.join(DATA_DIR, f'reachability_{i}.txt'), 'r'
