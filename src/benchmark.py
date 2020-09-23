@@ -6,23 +6,14 @@ import os
 import time
 import glob
 
-GRAPH_DIRS_ = ['LUBM300', 'uniprotkb_archea_asgard_group_1935183_0',
+GRAPH_DIRS = ['LUBM300', 'uniprotkb_archea_asgard_group_1935183_0',
               'proteomes', 'LUBM1.5M', 'LUBM1M', 'LUBM1.9M',
               'geospecies', 'mappingbased_properties_en', 'LUBM500']
-GRAPH_DIRS = ['proteomes', 'mappingbased_properties', 'geospecies']
 
 bench_prefix = 'query_benchmarks/refinedDataForRPQ'
 
 for d_name in GRAPH_DIRS:
     with open(f'query_benchmarks/{d_name}_bench.csv', 'w') as res_f:
-
-        #collected_ = list(
-        #    map ( lambda x: x[1],
-        #          list(map(lambda x: x.split(', '), res_f.readlines()))
-        #    )
-        #
-        collected = []
-
         graph_filename = glob.glob(f"{bench_prefix}/{d_name}/*.txt")[0]
         for regex_filename in os.listdir(f'{bench_prefix}/{d_name}/regexes/'):
             if regex_filename in collected:
@@ -52,11 +43,10 @@ for d_name in GRAPH_DIRS:
                                             start, end, bool(tc_method))[1]
 
                         total_time = time.time_ns() - start
-
                         
-                        # getting time in seconds
+                        # getting time in μs
                         times.append(
-                            total_time / (10 ** 9)
+                            total_time // (10 ** 3)
                         )
                     
                     print(f'Writing results...\n')
