@@ -19,7 +19,7 @@ pytest
 
 ## Assignment_2: Simple graph DB
 
-Graph DB accepts graphs in simple triples format, uses pyformlang regex format to specify queries
+Minimal Graph DB accepts graphs in simple triples format, uses pyformlang regex format to specify queries.
 ```
 usage: main.py [-h] --graph GRAPH --regex REGEX [--start START] [--end END]
 
