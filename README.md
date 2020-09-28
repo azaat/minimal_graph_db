@@ -36,3 +36,7 @@ Test with ```python3 -m pytest```
 ## Assignment_3
 
 Experimental report can be found in Analysis.pdf. CSV files used in analysis are in ./query_benchmarks.
+
+## Assignment_4
+
+Added wrapper for Context-Free grammars in pyformlang which uses my implementation of CYK algorithm for the ```contains``` method.
