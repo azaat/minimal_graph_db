@@ -47,8 +47,4 @@ def perform_cfpq(graph: LabelGraph, grammar: GrammarCNF):
                                 matrix_changing = True
                                 result.graph_dict[head][i, j] = True
 
-    return result, start_sym
-
-
-
-    
+    return result.graph_dict[start_sym]

@@ -39,6 +39,12 @@ class LabelGraph:
                  .to_lists()[:2]
         )
 
+    def get_reachable(matrix):
+        return zip(
+            *matrix.select(lib.GxB_NONZERO)
+                   .to_lists()[:2]
+        )
+
     def to_GrB_matrix(self):
         res = Matrix.sparse(BOOL, self.num_vert, self.num_vert)
         for label in self.graph_dict:
