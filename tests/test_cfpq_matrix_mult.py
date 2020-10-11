@@ -1,6 +1,6 @@
 import os
 from src.grammar_cnf import GrammarCNF
-from src.cfpq import cfpq_hellings
+from src.cfpq import cfpq_matrix_mult
 from src.graph import LabelGraph
 
 DATA_DIR = 'tests/cfpq_test_data'
@@ -21,7 +21,7 @@ def test_cfpq_brackets():
             graph = LabelGraph().from_txt(
                 os.path.join(DATA_DIR, f'graph_{i}.txt')
             )
-            result = cfpq_hellings(graph, brackets_cnf)
+            result = cfpq_matrix_mult(graph, brackets_cnf)
 
             expected = set()
             with open(
@@ -39,7 +39,7 @@ def test_cfpq_empty_graph():
     brackets_cnf = GrammarCNF.from_text(
             TEST_GRAMMARS[0]
     )
-    result = cfpq_hellings(LabelGraph(), brackets_cnf)
+    result = cfpq_matrix_mult(LabelGraph(), brackets_cnf)
     expected = set()
     edges = set(LabelGraph.get_reachable(result))
     assert edges == expected
@@ -55,7 +55,7 @@ def test_cfpq_grammar_2():
             graph = LabelGraph().from_txt(
                 os.path.join(DATA_DIR, f'graph_{i}.txt')
             )
-            result = cfpq_hellings(graph, brackets_cnf)
+            result = cfpq_matrix_mult(graph, brackets_cnf)
 
             expected = set()
             with open(
