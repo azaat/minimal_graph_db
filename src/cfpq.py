@@ -5,20 +5,20 @@ from pygraphblas import Matrix, BOOL
 from pyformlang.cfg import Terminal
 
 
-def perform_cfpq(graph: LabelGraph, grammar: GrammarCNF):
-    num_vert = graph.num_vert
-    start_sym = grammar.start_symbol
+def perform_cfpq(g: LabelGraph, cfg: GrammarCNF):
+    num_vert = g.num_vert
+    start_sym = cfg.start_symbol
     result = LabelGraph()
     result.num_vert = num_vert
-    for variable in grammar.variables:
+    for variable in cfg.variables:
         result.graph_dict[variable] = Matrix.sparse(BOOL, num_vert, num_vert)
 
     # 1st step: changing the terminals on edges to the sets of variables
-    for label in graph.graph_dict:
+    for label in g.graph_dict:
         term = Terminal(label)
-        result.graph_dict[term] = graph.graph_dict[label].dup()
-        for v_from, v_to in graph.get_edges(label):
-            for production in grammar.productions:
+        result.graph_dict[term] = g.graph_dict[label].dup()
+        for v_from, v_to in g.get_edges(label):
+            for production in cfg.productions:
                 if (
                         len(production.body) == 1 and
                         production.body[0] == term
@@ -27,7 +27,7 @@ def perform_cfpq(graph: LabelGraph, grammar: GrammarCNF):
                     result.graph_dict[head][v_from, v_to] = True
 
     # 2nd step: adding loops for epsilon rule
-    if grammar.generate_epsilon():
+    if cfg.generate_epsilon():
         for v in range(num_vert):
             result.graph_dict[start_sym][v, v] = True
 
@@ -35,7 +35,7 @@ def perform_cfpq(graph: LabelGraph, grammar: GrammarCNF):
     matrix_changing = True
     while matrix_changing:
         matrix_changing = False
-        for production in grammar.productions:
+        for production in cfg.productions:
             head = production.head
             body = production.body
             # Looking for productions of the form N1 -> N2 N3
