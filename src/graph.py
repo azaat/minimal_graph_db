@@ -32,6 +32,19 @@ class LabelGraph:
             self.graph_dict[p][int(s), int(o)] = True
         return self
 
+    def get_edges(self, label):
+        return zip(
+            *self.graph_dict[label]
+                 .select(lib.GxB_NONZERO)
+                 .to_lists()[:2]
+        )
+
+    def get_reachable(matrix):
+        return zip(
+            *matrix.select(lib.GxB_NONZERO)
+                   .to_lists()[:2]
+        )
+
     def to_GrB_matrix(self):
         res = Matrix.sparse(BOOL, self.num_vert, self.num_vert)
         for label in self.graph_dict:
