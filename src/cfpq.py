@@ -2,21 +2,21 @@ import os
 from src.grammar_cnf import GrammarCNF
 from src.graph import LabelGraph
 from pygraphblas import Matrix, BOOL
-from pyformlang.cfg import Terminal
+from pyformlang.cfg import Terminal, CFG
 
 
-def cfpq_matrix_mult(graph: LabelGraph, grammar: GrammarCNF):
-    num_vert = graph.num_vert
+def cfpq_matrix_mult(g: LabelGraph, cfg: CFG):
+    num_vert = g.num_vert
     result = LabelGraph()
-    start_sym = grammar.start_symbol
+    start_sym = cfg.start_symbol
     result.num_vert = num_vert
-    for variable in grammar.variables:
+    for variable in cfg.variables:
         result.graph_dict[variable] = Matrix.sparse(BOOL, num_vert, num_vert)
 
-    for label in graph.graph_dict:
+    for label in g.graph_dict:
         term = Terminal(label)
-        for v_from, v_to in graph.get_edges(label):
-            for production in grammar.productions:
+        for v_from, v_to in g.get_edges(label):
+            for production in cfg.productions:
                 if (
                         len(production.body) == 1 and
                         production.body[0] == term
@@ -24,14 +24,14 @@ def cfpq_matrix_mult(graph: LabelGraph, grammar: GrammarCNF):
                     head = production.head
                     result.graph_dict[head][v_from, v_to] = True
 
-    if grammar.generate_epsilon():
+    if cfg.generate_epsilon():
         for v in range(num_vert):
             result.graph_dict[start_sym][v, v] = True
     
     matrix_changing = True
     while matrix_changing:
         matrix_changing = False
-        for production in grammar.productions:
+        for production in cfg.productions:
             head = production.head
             body = production.body
             # Looking for productions of the form N1 -> N2 N3
@@ -44,9 +44,9 @@ def cfpq_matrix_mult(graph: LabelGraph, grammar: GrammarCNF):
     return result.graph_dict[start_sym]    
 
 
-def cfpq_hellings(graph: LabelGraph, grammar: GrammarCNF):
-    num_vert = graph.num_vert
-    start_sym = grammar.start_symbol
+def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
+    num_vert = g.num_vert
+    start_sym = cfg.start_symbol
     result = LabelGraph()
     result.num_vert = num_vert
     for variable in cfg.variables:
@@ -87,3 +87,7 @@ def cfpq_hellings(graph: LabelGraph, grammar: GrammarCNF):
                                 result.graph_dict[head][i, j] = True
 
     return result.graph_dict[start_sym]
+
+
+def cfpq_tensor_product(g: LabelGraph, cfg: GrammarCNF):
+    return True
