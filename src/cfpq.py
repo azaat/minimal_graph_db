@@ -15,7 +15,6 @@ def cfpq_matrix_mult(graph: LabelGraph, grammar: GrammarCNF):
 
     for label in graph.graph_dict:
         term = Terminal(label)
-        #result.graph_dict[term] = graph.graph_dict[label].dup()
         for v_from, v_to in graph.get_edges(label):
             for production in grammar.productions:
                 if (
