@@ -1,4 +1,4 @@
-from pygraphblas import BOOL, Matrix, lib
+from pygraphblas import BOOL, Matrix, lib, semiring
 from pyformlang.cfg import CFG
 
 
@@ -52,7 +52,8 @@ class LabelGraph:
     def to_GrB_matrix(self):
         res = Matrix.sparse(BOOL, self.num_vert, self.num_vert)
         for label in self.graph_dict:
-            res += self.graph_dict[label]
+            with semiring.LOR_LAND_BOOL:
+                res += self.graph_dict[label]
         return res
 
 

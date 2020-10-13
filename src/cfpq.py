@@ -40,7 +40,8 @@ def cfpq_matrix_mult(g: LabelGraph, cfg: GrammarCNF):
             # Looking for productions of the form N1 -> N2 N3
             if (len(body) == 2):
                 prev_nvals = result.graph_dict[head].nvals
-                result.graph_dict[head] += result.graph_dict[body[0]] @ result.graph_dict[body[1]]
+                with semiring.LOR_LAND_BOOL:
+                    result.graph_dict[head] += result.graph_dict[body[0]] @ result.graph_dict[body[1]]
                 if (prev_nvals != result.graph_dict[head].nvals):
                     matrix_changing = True
 
