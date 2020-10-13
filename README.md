@@ -42,3 +42,7 @@ Experimental report can be found in Analysis.pdf. CSV files used in analysis are
 Added wrapper for Context-Free grammars in pyformlang which uses my implementation of CYK algorithm for the ```contains``` method.
 
 Module ```src.cfpq``` implements the extended version of this algorithm to perform context-free path querying.
+
+## Assignment_5
+
+Two more cfpq implementations were added in ```src.cfpq```: with matrix multiplication and with transitive closure

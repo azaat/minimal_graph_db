@@ -92,6 +92,3 @@ class RFA(LabelGraph):
 
             index_p += 1
         return self
-
-
-    
