@@ -8,6 +8,8 @@ from src.rpq import get_transitive_closure
 
 def cfpq_matrix_mult(g: LabelGraph, cfg: GrammarCNF):
     num_vert = g.num_vert
+    if (num_vert == 0):
+        return Matrix.sparse(BOOL, num_vert, num_vert)
     result = LabelGraph()
     start_sym = cfg.start_symbol
     result.num_vert = num_vert
@@ -41,7 +43,8 @@ def cfpq_matrix_mult(g: LabelGraph, cfg: GrammarCNF):
                 # Looking for productions of the form N1 -> N2 N3
                 if (len(body) == 2):
                     prev_nvals = result.graph_dict[head].nvals
-                    result.graph_dict[head] += result.graph_dict[body[0]] @ result.graph_dict[body[1]]
+                    tmp = result.graph_dict[body[0]] @ result.graph_dict[body[1]]
+                    result.graph_dict[head] = result.graph_dict[head] + tmp
                     if (prev_nvals != result.graph_dict[head].nvals):
                         matrix_changing = True
 
@@ -98,6 +101,9 @@ def cfpq_tensor_product(g: LabelGraph, cfg: GrammarCNF):
     # Resulting matrix initialization
     result = LabelGraph()
     result.num_vert = g.num_vert
+    # Empty matrix case
+    if (g.num_vert == 0):
+        return Matrix.sparse(BOOL, g.num_vert, g.num_vert)
     result.graph_dict = {
         label: g.graph_dict[label].dup() for label in g.graph_dict
     }

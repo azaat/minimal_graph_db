@@ -5,6 +5,16 @@ from src.graph import LabelGraph
 from cfpq_test_helper import NUM_GRAPHS, TEST_GRAMMARS, DATA_DIR
 
 
+def test_cfpq_empty_graph():
+    brackets_cnf = GrammarCNF.from_text(
+            TEST_GRAMMARS[0]
+    )
+    result = cfpq_matrix_mult(LabelGraph(), brackets_cnf)
+    expected = set()
+    edges = set(LabelGraph.get_reachable(result))
+    assert edges == expected
+
+
 def test_cfpq_brackets():
     for i in range(NUM_GRAPHS):
         brackets_cnf = GrammarCNF.from_text(
