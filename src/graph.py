@@ -1,10 +1,12 @@
 from pygraphblas import BOOL, Matrix, lib
+from pyformlang.cfg import CFG
 
 
 class LabelGraph:
     def __init__(self):
         self.graph_dict = {}
         self.num_vert = 0
+        self.vertices = set()
     
     def from_graph_dict(self, graph_dict, num_vert):
         self.graph_dict = graph_dict
@@ -30,6 +32,8 @@ class LabelGraph:
                     self.num_vert
                 )
             self.graph_dict[p][int(s), int(o)] = True
+            self.vertices.add(int(s))
+            self.vertices.add(int(o))
         return self
 
     def get_edges(self, label):
@@ -50,3 +54,43 @@ class LabelGraph:
         for label in self.graph_dict:
             res += self.graph_dict[label]
         return res
+
+
+class RFA(LabelGraph):
+    def __init__(self):
+        LabelGraph.__init__(self)
+        self.start_states = set()
+        self.final_states = set()
+        self.var_by_vertices = {}
+    
+    def from_cfg(self, cfg: CFG):
+        # Computing size as the sum of production sizes (1 for head + n in boody)
+        self.num_vert = sum(
+            1 + len(p.body) for p in cfg.productions
+        )
+
+        index_p = 0
+        for p in cfg.productions:
+            if (p.head.value not in self.graph_dict):
+                self.graph_dict[p.head.value] = Matrix.sparse(BOOL, self.num_vert, self.num_vert)
+            
+            if p.body != []:
+                self.start_states.add(index_p)
+            
+            self.var_by_vertices[(index_p, index_p + len(p.body))] = p.head.value
+
+            for body_sym in p.body:
+                if body_sym.value not in self.graph_dict:
+                    self.graph_dict[body_sym.value] = Matrix.sparse(BOOL, self.num_vert, self.num_vert)
+                self.graph_dict[body_sym.value][index_p, index_p + 1] = True
+                self.vertices.add(index_p)
+                self.vertices.add(index_p + 1)
+                index_p += 1
+            self.final_states.add(index_p)
+            self.vertices.add(index_p)
+
+            index_p += 1
+        return self
+
+
+    
