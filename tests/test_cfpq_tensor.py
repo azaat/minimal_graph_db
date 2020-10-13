@@ -2,14 +2,7 @@ import os
 from src.cfpq import cfpq_tensor_product
 from pyformlang.cfg import CFG
 from src.graph import LabelGraph
-
-DATA_DIR = 'tests/cfpq_test_data'
-NUM_GRAPHS = 2
-TEST_GRAMMARS = [
-    'S -> a S b S\nS -> ',
-    'S -> S S\nS -> a b'
-]
-
+from cfpq_test_helper import NUM_GRAPHS, TEST_GRAMMARS, DATA_DIR
 
 def test_cfpq_brackets():
     for i in range(NUM_GRAPHS):
