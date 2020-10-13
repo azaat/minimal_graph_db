@@ -26,7 +26,7 @@ def cfpq_matrix_mult(g: LabelGraph, cfg: GrammarCNF):
                     result.graph_dict[head][v_from, v_to] = True
 
     if cfg.generate_epsilon():
-        for v in range(num_vert):
+        for v in g.vertices:
             result.graph_dict[start_sym][v, v] = True
     
     matrix_changing = True
@@ -127,7 +127,7 @@ def cfpq_tensor_product(g: LabelGraph, cfg: GrammarCNF):
         tmp.graph_dict = tmp_graph_dict
         tmp.num_vert = num_vert
         intersection = tmp.to_GrB_matrix()
-        
+
         # Transitive closure
         old_nvals = 0 if tc is None else tc.nvals
         tc = get_transitive_closure(intersection)
