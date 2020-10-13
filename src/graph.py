@@ -51,8 +51,8 @@ class LabelGraph:
 
     def to_GrB_matrix(self):
         res = Matrix.sparse(BOOL, self.num_vert, self.num_vert)
-        for label in self.graph_dict:
-            with semiring.LOR_LAND_BOOL:
+        with semiring.LOR_LAND_BOOL:
+            for label in self.graph_dict:
                 res += self.graph_dict[label]
         return res
 

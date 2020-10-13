@@ -35,16 +35,6 @@ def test_cfpq_brackets():
             assert edges == expected
 
 
-def test_cfpq_empty_graph():
-    brackets_cnf = CFG.from_text(
-            TEST_GRAMMARS[0]
-    )
-    result = cfpq_tensor_product(LabelGraph(), brackets_cnf)
-    expected = set()
-    edges = set(LabelGraph.get_reachable(result))
-    assert edges == expected
-
-
 def test_cfpq_grammar_2():
     for i in range(NUM_GRAPHS):
         g_2 = CFG.from_text(
