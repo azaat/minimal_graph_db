@@ -149,10 +149,3 @@ def cfpq_tensor_product(g: LabelGraph, cfg: GrammarCNF):
             matrix_changing = True
     
     return result.graph_dict[cfg.start_symbol.value]
-
-
-
-
-    
-
-    
