@@ -1,7 +1,7 @@
 import os
 from src.grammar_cnf import GrammarCNF
 from src.graph import LabelGraph, RFA
-from pygraphblas import Matrix, BOOL
+from pygraphblas import Matrix, BOOL, semiring
 from pyformlang.cfg import Terminal, CFG
 from src.rpq import get_transitive_closure
 
@@ -16,6 +16,8 @@ def cfpq_matrix_mult(g: LabelGraph, cfg: GrammarCNF):
 
     for label in g.graph_dict:
         term = Terminal(label)
+
+        result.graph_dict[term] = g.graph_dict[label].dup()
         for v_from, v_to in g.get_edges(label):
             for production in cfg.productions:
                 if (
@@ -92,6 +94,7 @@ def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
 
 def cfpq_tensor_product(g: LabelGraph, cfg: GrammarCNF):
     rfa = RFA().from_cfg(cfg)
+    # Resulting matrix initialization
     result = LabelGraph()
     result.num_vert = g.num_vert
     result.graph_dict = {
@@ -100,7 +103,9 @@ def cfpq_tensor_product(g: LabelGraph, cfg: GrammarCNF):
     for label in rfa.graph_dict:
         if label not in result.graph_dict:
             result.graph_dict[label] = Matrix.sparse(BOOL, g.num_vert, g.num_vert)
-
+    for term in cfg.terminals:
+        if term.value not in result.graph_dict:
+            result.graph_dict[term.value] = Matrix.sparse(BOOL, g.num_vert, g.num_vert)
     # Loops for epsilon productions
     for p in cfg.productions:
         if p.body == []:
@@ -108,7 +113,6 @@ def cfpq_tensor_product(g: LabelGraph, cfg: GrammarCNF):
                 result.graph_dict[p.head.value][v, v] = True
 
     matrix_changing = True
-    nvals = result.graph_dict[p.head.value].nvals
 
     tc = None
     while matrix_changing:
