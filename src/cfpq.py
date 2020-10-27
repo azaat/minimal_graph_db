@@ -37,16 +37,17 @@ def cfpq_matrix_mult(g: LabelGraph, cfg: GrammarCNF):
     with semiring.LOR_LAND_BOOL:
         while matrix_changing:
             matrix_changing = False
-            for production in cfg.productions:
+            for production in cfg.pair_productions:
                 head = production.head
                 body = production.body
-                # Looking for productions of the form N1 -> N2 N3
-                if (len(body) == 2):
-                    prev_nvals = result.graph_dict[head].nvals
-                    tmp = result.graph_dict[body[0]] @ result.graph_dict[body[1]]
-                    result.graph_dict[head] = result.graph_dict[head] + tmp
-                    if (prev_nvals != result.graph_dict[head].nvals):
-                        matrix_changing = True
+                
+                prev_nvals = result.graph_dict[head].nvals
+                tmp = result.graph_dict[body[0]] @ result.graph_dict[body[1]]
+                result.graph_dict[head] = result.graph_dict[head] + tmp
+                if (prev_nvals != result.graph_dict[head].nvals):
+                    matrix_changing = True
+                    print('3rd step, changing, loop...')
+
 
     return result.graph_dict[start_sym]    
 
@@ -81,17 +82,18 @@ def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
     matrix_changing = True
     while matrix_changing:
         matrix_changing = False
-        for production in cfg.productions:
+        for production in cfg.pair_productions:
             head = production.head
             body = production.body
-            # Looking for productions of the form N1 -> N2 N3
-            if (len(body) == 2):
-                for i, m in result.get_edges(body[0]):
-                    for k, j in result.get_edges(body[1]):
-                        if (k == m):
-                            if (i, j) not in result.get_edges(head):
-                                matrix_changing = True
-                                result.graph_dict[head][i, j] = True
+            for i, m in result.get_edges(body[0]):
+                for k, j in result.get_edges(body[1]):
+                    if (k == m):
+                        print('Entering check...')
+                        if (i, j) not in result.get_edges(head):
+                            matrix_changing = True
+                            result.graph_dict[head][i, j] = True
+                            print('Changing, loop...')
+                        print('Exited check...')
 
     return result.graph_dict[start_sym]
 

@@ -37,7 +37,7 @@ class GrammarCNF(CFGWrapper):
 
 
     @staticmethod   
-    def from_txt(cls, path):
+    def from_txt(path):
         productions = []
         with open(path, 'r') as f:
             for line in f:
