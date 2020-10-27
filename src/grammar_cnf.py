@@ -46,7 +46,7 @@ class GrammarCNF(CFGWrapper):
                     production[0] + ' -> ' + ' '.join(production[1:])
                 )
 
-        return GrammarCNF.from_text(productions)
+        return GrammarCNF.from_text('\n'.join(productions))
 
         
 
