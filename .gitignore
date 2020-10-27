@@ -10,3 +10,7 @@ query_benchmarks/refinedDataForRPQ
 query_benchmarks/.ipynb_checkpoints
 
 __pycache__/
+
+.eggs/
+
+cfpq_benchmarks/
