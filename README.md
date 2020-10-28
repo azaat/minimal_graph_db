@@ -46,3 +46,11 @@ Module ```src.cfpq``` implements the extended version of this algorithm to perfo
 ## Assignment_5
 
 Two more cfpq implementations were added in ```src.cfpq```: with matrix multiplication and with transitive closure
+
+CFG is accepted as text file with lines ```HEAD BODY``` delimited with space symbols. The format allows production body to contain regular expression:
+
+```
+S (a S b)*
+```
+
+All variables should be uppercase, terminals - lowercase.
