@@ -60,7 +60,10 @@ def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
     for variable in cfg.variables:
         result.graph_dict[variable] = Matrix.sparse(BOOL, num_vert, num_vert)
 
-    # 1st step: changing the terminals on edges to the sets of variables
+    if cfg.generate_epsilon():
+        for v in range(num_vert):
+            result.graph_dict[start_sym][v, v] = True
+    
     for label in g.graph_dict:
         term = Terminal(label)
         result.graph_dict[term] = g.graph_dict[label].dup()
@@ -72,11 +75,6 @@ def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
                 ):
                     head = production.head
                     result.graph_dict[head][v_from, v_to] = True
-
-    # 2nd step: adding loops for epsilon rule
-    if cfg.generate_epsilon():
-        for v in range(num_vert):
-            result.graph_dict[start_sym][v, v] = True
 
     for label in result.graph_dict:
         for i, j in result.get_edges(label):
@@ -93,7 +91,7 @@ def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
                             production.body[1] == var
                             and production.body[0] == var_left
                         ):
-                            if (v_new, u) not in result.get_edges(head):
+                            if (v_new, u) not in result.get_edges(production.head):
                                 result.graph_dict[production.head][v_new, u] = True
                                 m.append((production.head, v_new, u))
         for var_right in result.graph_dict:
@@ -104,7 +102,7 @@ def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
                             production.body[1] == var_right
                             and production.body[0] == var
                         ):
-                            if (v, u_new) not in result.get_edges(head):
+                            if (v, u_new) not in result.get_edges(production.head):
                                 result.graph_dict[production.head][v, u_new] = True
                                 m.append((production.head, v, u_new))
     return result.graph_dict[start_sym]
