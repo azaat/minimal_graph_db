@@ -2,13 +2,11 @@ import os
 from src.grammar_cnf import GrammarCNF
 from src.cfpq import cfpq_hellings
 from src.graph import LabelGraph
+from tests.cfpq_test_helper import TEST_GRAMMARS
+
 
 DATA_DIR = 'tests/cfpq_test_data'
 NUM_GRAPHS = 2
-TEST_GRAMMARS = [
-    'S -> a S b S\nS -> ',
-    'S -> S S\nS -> a b'
-]
 
 
 def test_cfpq_brackets():

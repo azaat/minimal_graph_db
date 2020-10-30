@@ -3,11 +3,12 @@ from src.cfpq import cfpq_tensor_product
 from src.grammar_cnf import GrammarCNF
 from pyformlang.cfg import CFG
 from src.graph import LabelGraph
+from src.grammar import CFGWrapper
 from cfpq_test_helper import NUM_GRAPHS, TEST_GRAMMARS, DATA_DIR
 
 
 def test_cfpq_empty_graph():
-    brackets_cnf = GrammarCNF.from_text(
+    brackets_cnf = CFGWrapper.from_text(
             TEST_GRAMMARS[0]
     )
     result = cfpq_tensor_product(LabelGraph(), brackets_cnf)
@@ -18,7 +19,7 @@ def test_cfpq_empty_graph():
 
 def test_cfpq_brackets():
     for i in range(NUM_GRAPHS):
-        brackets_cnf = CFG.from_text(
+        brackets = CFGWrapper.from_text(
             TEST_GRAMMARS[0]
         )
 
@@ -26,7 +27,7 @@ def test_cfpq_brackets():
             graph = LabelGraph().from_txt(
                 os.path.join(DATA_DIR, f'graph_{i}.txt')
             )
-            result = cfpq_tensor_product(graph, brackets_cnf)
+            result = cfpq_tensor_product(graph, brackets)
 
             expected = set()
             with open(
@@ -42,7 +43,7 @@ def test_cfpq_brackets():
 
 def test_cfpq_grammar_2():
     for i in range(NUM_GRAPHS):
-        g_2 = CFG.from_text(
+        g_2 = CFGWrapper.from_text(
             TEST_GRAMMARS[1]
         )
 

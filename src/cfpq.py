@@ -1,4 +1,5 @@
 import os
+from collections import deque
 from src.grammar_cnf import GrammarCNF
 from src.graph import LabelGraph, RFA
 from pygraphblas import Matrix, BOOL, semiring
@@ -37,16 +38,14 @@ def cfpq_matrix_mult(g: LabelGraph, cfg: GrammarCNF):
     with semiring.LOR_LAND_BOOL:
         while matrix_changing:
             matrix_changing = False
-            for production in cfg.productions:
+            for production in cfg.pair_productions:
                 head = production.head
                 body = production.body
-                # Looking for productions of the form N1 -> N2 N3
-                if (len(body) == 2):
-                    prev_nvals = result.graph_dict[head].nvals
-                    tmp = result.graph_dict[body[0]] @ result.graph_dict[body[1]]
-                    result.graph_dict[head] = result.graph_dict[head] + tmp
-                    if (prev_nvals != result.graph_dict[head].nvals):
-                        matrix_changing = True
+                prev_nvals = result.graph_dict[head].nvals
+                tmp = result.graph_dict[body[0]] @ result.graph_dict[body[1]]
+                result.graph_dict[head] = result.graph_dict[head] + tmp
+                if (prev_nvals != result.graph_dict[head].nvals):
+                    matrix_changing = True
 
     return result.graph_dict[start_sym]    
 
@@ -56,10 +55,15 @@ def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
     start_sym = cfg.start_symbol
     result = LabelGraph()
     result.num_vert = num_vert
+    m = deque()
+
     for variable in cfg.variables:
         result.graph_dict[variable] = Matrix.sparse(BOOL, num_vert, num_vert)
 
-    # 1st step: changing the terminals on edges to the sets of variables
+    if cfg.generate_epsilon():
+        for v in range(num_vert):
+            result.graph_dict[start_sym][v, v] = True
+    
     for label in g.graph_dict:
         term = Terminal(label)
         result.graph_dict[term] = g.graph_dict[label].dup()
@@ -72,27 +76,35 @@ def cfpq_hellings(g: LabelGraph, cfg: GrammarCNF):
                     head = production.head
                     result.graph_dict[head][v_from, v_to] = True
 
-    # 2nd step: adding loops for epsilon rule
-    if cfg.generate_epsilon():
-        for v in range(num_vert):
-            result.graph_dict[start_sym][v, v] = True
+    for label in result.graph_dict:
+        for i, j in result.get_edges(label):
+            m.append((label, i, j))
 
     # 3rd step: cfpq on modified matrix
-    matrix_changing = True
-    while matrix_changing:
-        matrix_changing = False
-        for production in cfg.productions:
-            head = production.head
-            body = production.body
-            # Looking for productions of the form N1 -> N2 N3
-            if (len(body) == 2):
-                for i, m in result.get_edges(body[0]):
-                    for k, j in result.get_edges(body[1]):
-                        if (k == m):
-                            if (i, j) not in result.get_edges(head):
-                                matrix_changing = True
-                                result.graph_dict[head][i, j] = True
-
+    while m:
+        var, v, u = m.popleft()
+        for var_left in result.graph_dict:
+            for v_new, v_ in result.get_edges(var_left):
+                if (v_ == v):
+                    for production in cfg.pair_productions:
+                        if (
+                            production.body[1] == var
+                            and production.body[0] == var_left
+                        ):
+                            if (v_new, u) not in result.get_edges(production.head):
+                                result.graph_dict[production.head][v_new, u] = True
+                                m.append((production.head, v_new, u))
+        for var_right in result.graph_dict:
+            for u_, u_new in result.get_edges(var_right):
+                if (u_ == u):
+                    for production in cfg.pair_productions:
+                        if (
+                            production.body[1] == var_right
+                            and production.body[0] == var
+                        ):
+                            if (v, u_new) not in result.get_edges(production.head):
+                                result.graph_dict[production.head][v, u_new] = True
+                                m.append((production.head, v, u_new))
     return result.graph_dict[start_sym]
 
 

@@ -1,8 +1,5 @@
 from src.grammar_cnf import GrammarCNF
-TEST_GRAMMARS = [
-    'S -> a S b S\nS -> ',
-    'S -> S S\nS -> a b'
-]
+from tests.cfpq_test_helper import TEST_GRAMMARS
 
 
 def test_1_word_accepts():
