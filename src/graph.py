@@ -25,7 +25,6 @@ class LabelGraph:
         f = open(path, 'r')
         self.num_vert = get_num_vertices(path)
         for line in f:
-            line = line.strip(' \n')
             s, p, o = line.split(' ')
             if (p not in self.graph_dict):
                 self.graph_dict[p] = Matrix.sparse(
