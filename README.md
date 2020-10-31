@@ -35,7 +35,7 @@ Test with ```python3 -m pytest```
 
 ## Assignment_3
 
-Experimental report can be found in Analysis.pdf. CSV files used in analysis are in ./query_benchmarks.
+Experimental report can be found in ```RPQAnalysis.pdf```. CSV files used in analysis are in ./query_benchmarks.
 
 ## Assignment_4
 
@@ -46,3 +46,7 @@ Module ```src.cfpq``` implements the extended version of this algorithm to perfo
 ## Assignment_5
 
 Two more cfpq implementations were added in ```src.cfpq```: with matrix multiplication and with transitive closure
+
+## Assignment_6
+
+Experimental report with different CFPQ algorithms can be found in ```CFPQAnalysis.pdf```. The plots were generated using the Seaborn library, algorithms were launched with ```timeout 30m``` shell command, to avoid hanging benchmarks on one iteration.
