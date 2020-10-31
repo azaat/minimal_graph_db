@@ -47,7 +47,6 @@ def cfpq_matrix_mult(g: LabelGraph, cfg: GrammarCNF):
                 if (prev_nvals != result.graph_dict[head].nvals):
                     matrix_changing = True
 
-
     return result.graph_dict[start_sym]    
 
 
