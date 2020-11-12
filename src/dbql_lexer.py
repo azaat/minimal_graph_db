@@ -2,30 +2,36 @@ from pyformlang.cfg import Terminal
 
 KEYWORDS = [
     'connect',
-    'concat'
+    'concat',
     'select',
     'intersect',
     'from',
     'query',
     'name',
+    'set',
+    'range',
+    'edges',
     'or',
+    'of',
     'and',
     'not',
-    'is',
-    'start',
-    'star'
-    'alt'
+    'isStart',
+    'star',
+    'alt',
     'opt',
     'plus',
-    'ptEps'
-    'final',
+    'ptEps',
+    'isFinal',
+    'labelIs',
+    'define',
     'term',
-    'startAndFinal'
+    'startAndFinal',
     'var',
     'filter',
     'satisfies',
     'count',
-    'with'
+    'with',
+    'as'
 ]
 
 def get_lex(word):

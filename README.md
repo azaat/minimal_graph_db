@@ -66,6 +66,7 @@ Statements in the script should be separated with ``` ; ```. Description of the 
   ```
   connect azat/home/db
   ```
+
 - ```select [TARGET] from [GRAPH]``` - selects specified target from the graph or graph expression.
 
   **Possible ```[TARGET]``` values:**
@@ -74,13 +75,14 @@ Statements in the script should be separated with ``` ; ```. Description of the 
 
     - Predicate format:
       ```satisfies [BOOLEAN EXPRESSION]```
-      For the triple (v, label, u) returns whether or not is satisfies boolean predicates of the form:
+      For the triple (v, label, u) returns boolean value for a combination of boolean predicates of the form:
 
       ```
-      start is [START VERTEX INDEX]
-      final is [FINAL VERTEX INDEX]
-      label is [LABEL VALUE]
+      isStart [VERTEX NAME]
+      isFinal [VERTEX NAME]
+      labelIs [LABEL NAME]
       ```
+      where isStart, isFinal return whether vertex is start or final.
 
       Combined expressions with these predicates can be specified with ```and```, ```or```,  ```not```.
 
@@ -91,7 +93,11 @@ Statements in the script should be separated with ``` ; ```. Description of the 
     - ```name [GRAPH NAME]```
     - ```query [PATTERN]```
       - ```PATTERN``` is a user-defined reqular expression.
-      Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon should be ```ptEps```.
+      Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon should be ```ptEps```. Terminals should be preceded with ```term``` keyword, nonterminals - with ```var```.
+
+      Example usage: 
     - ```[GRAPH EXPRESSION] intersect [GRAPH EXPRESSION] ``` - intersection of graph automata
     - ```startAndFinal [VERTICES] [VERTICES] of [GRAPH EXPRESSION]``` - specifies start and final vertices for the graph or graph expression
-      -  ```VERTICES``` can be specified as a set of numbers (```1 2 3 4 ...```) or as a range: ```( start , end )```
+      -  ```VERTICES``` can be specified as a set of numbers (```set 1 2 3 4 ...```) or as a range: ```range ( start , end )```
+
+- ```define [PATTERN] as [PATTERN NAME] of [GRAPH EXPRESSION]``` - this statement should be used to define named patterns to build grammar productions.
