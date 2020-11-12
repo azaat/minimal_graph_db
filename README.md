@@ -68,7 +68,7 @@ Statements in the script should be separated with ``` ; ```. Description of the 
   ```
 - ```select [TARGET] from [GRAPH]``` - selects specified target from the graph or graph expression.
 
-  Possible ```[TARGET]``` values:
+  **Possible ```[TARGET]``` values:**
   - ```edges``` - if you need to select a set of edges
   - ```filter [EDGE EXPRESSION] with [PREDICATE]``` - if you need to filter edges with some predicate. Edge expression can be either ```edges``` or filter of edges.
 
@@ -87,7 +87,7 @@ Statements in the script should be separated with ``` ; ```. Description of the 
 
   - ```count [EDGE EXPRESSION]``` - if you need to select the count of edges. Edge expression can be either ```edges``` or filter of edges.
   
-  ```GRAPH``` expression can be one of:
+  **```GRAPH``` expression can be one of:**
     - ```name [GRAPH NAME]```
     - ```query [PATTERN]```
       - ```PATTERN``` is a user-defined reqular expression.
