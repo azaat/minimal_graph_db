@@ -2,6 +2,7 @@ from pyformlang.cfg import Terminal
 
 KEYWORDS = [
     'connect',
+    'concat'
     'select',
     'intersect',
     'from',
@@ -12,11 +13,17 @@ KEYWORDS = [
     'not',
     'is',
     'start',
+    'star'
+    'alt'
+    'opt',
+    'plus',
+    'ptEps'
     'final',
     'term',
+    'startAndFinal'
     'var',
     'filter',
-    'sat',
+    'satisfies',
     'count',
     'with'
 ]

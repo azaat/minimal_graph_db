@@ -54,3 +54,44 @@ S (a S b)*
 ```
 
 All variables should be uppercase, terminals - lowercase.
+
+## Assignment_7: Graph DB Query Language Syntax
+
+### Syntax documentation
+
+Statements in the script should be separated with ``` ; ```. Description of the possible statements:
+- ```connect [PATH]``` - connects to the database with the specified path
+
+  Example usage:
+  ```
+  connect azat/home/db
+  ```
+- ```select [TARGET] from [GRAPH]``` - selects specified target from the graph or graph expression.
+
+  Possible ```[TARGET]``` values:
+  - ```edges``` - if you need to select a set of edges
+  - ```filter [EDGE EXPRESSION] with [PREDICATE]``` - if you need to filter edges with some predicate. Edge expression can be either ```edges``` or filter of edges.
+
+    - Predicate format:
+      ```satisfies [BOOLEAN EXPRESSION]```
+      For the triple (v, label, u) returns whether or not is satisfies boolean predicates of the form:
+
+      ```
+      start is [START VERTEX INDEX]
+      final is [FINAL VERTEX INDEX]
+      label is [LABEL VALUE]
+      ```
+
+      Combined expressions with these predicates can be specified with ```and```, ```or```,  ```not```.
+
+
+  - ```count [EDGE EXPRESSION]``` - if you need to select the count of edges. Edge expression can be either ```edges``` or filter of edges.
+  
+  ```GRAPH``` expression can be one of:
+    - ```name [GRAPH NAME]```
+    - ```query [PATTERN]```
+      - ```PATTERN``` is a user-defined reqular expression.
+      Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon should be ```ptEps```.
+    - ```[GRAPH EXPRESSION] intersect [GRAPH EXPRESSION] ``` - intersection of graph automata
+    - ```startAndFinal [VERTICES] [VERTICES] of [GRAPH EXPRESSION]``` - specifies start and final vertices for the graph or graph expression
+      -  ```VERTICES``` can be specified as a set of numbers (```1 2 3 4 ...```) or as a range: ```( start , end )```
