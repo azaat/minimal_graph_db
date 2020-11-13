@@ -59,11 +59,8 @@ class CFGWrapper(CFG):
                     inner_body.append(Epsilon())
                 elif sym.value.isupper():
                     inner_body.append(Variable(sym))
-                elif sym.value.islower():
-                    inner_body.append(Terminal(sym))
                 else:
-                    raise ValueError(f'''Symbol "{sym}" is not defined as
-                                    a terminal or a variable''')
+                    inner_body.append(Terminal(sym))
 
                 inner_body.append(_var_dict[body_state])
                 production_set.add(
@@ -81,19 +78,22 @@ class CFGWrapper(CFG):
         lines = text.splitlines()
         production_set = set()
 
+        special_symbols = ['.', '\\', '+', '|', '(', ')']
+
         # productions
         for l in lines:
             pr = l.split(' -> ')
             head = Variable(pr[0])
             body_str = pr[1].rstrip('\n')
-
-            # pyformlang doesn't accept '?' quantifier, transforming to alternative expression
+            #if any(sym in special_symbols for sym in body_str):
+                # pyformlang doesn't accept '?' quantifier, transforming to alternative expression
             body_str = body_str.replace('?', f'|{EPS_SYM}')
-
+            
             production_set |= CFGWrapper.regex_to_grammar_productions(
                 Regex(body_str),
                 head
             )
+            
 
         return CFG(
             start_symbol=start_symbol,
