@@ -59,12 +59,14 @@ All variables should be uppercase, terminals - lowercase.
 
 ### Syntax documentation
 
-Statements in the script should be separated with ``` ; ```. Description of the possible statements:
-- ```connect [PATH]``` - connects to the database with the specified path
+Statements in the script should be separated with ``` ; ```, tokens and keywords - with arbitrary amount of whitespace. Strings are defined like this: ```"example_string"```, supported string characters: (```/```, ```.```, ```_```, ```0-9```, ```a-z```)
+. Int type describes natural numbers. 
 
+Description of the possible database statements:
+- ```connect [PATH]``` - connects to the database with the specified path, path should be of string type.
   Example usage:
   ```
-  connect azat/home/db
+  connect "azat/home/db" ;
   ```
 
 - ```select [TARGET] from [GRAPH]``` - selects specified target from the graph or graph expression.
@@ -82,18 +84,24 @@ Statements in the script should be separated with ``` ; ```. Description of the 
       isFinal [VERTEX NAME]
       labelIs [LABEL NAME]
       ```
-      where isStart, isFinal return whether vertex is start or final.
+      where isStart, isFinal return whether vertex is start or final. Vertex and variable names should start with letter character, the rest of the name can contain numbers.
 
       Combined expressions with these predicates can be specified with ```and```, ```or```,  ```not```.
 
+      Example usage:
+      ```
+      select filter edges with 
+            ( u, l, v ) satisfies l labelIs "ar" or ( isStart u and isFinal v ) 
+                    from name "sparsegraph" ;
+      ```
 
-  - ```count [EDGE EXPRESSION]``` - if you need to select the count of edges. Edge expression can be either ```edges``` or filter of edges.
+  - ```count [EDGE EXPRESSION]``` - if you need to select the count of edges. Edge expression can be either ```edges``` or filter of edge expression.
   
   **```GRAPH``` expression can be one of:**
     - ```name [GRAPH NAME]```
     - ```query [PATTERN]```
       - ```PATTERN``` represesnts a non-empty user-defined reqular expression.
-      Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon is ```ptEps```. Terminals should be preceded with ```term``` keyword, nonterminals - with ```var```.
+      Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon is ```ptEps```. Both terminals and nonterminals are defined asTerminals are preceded with ```term``` keyword, nonterminals - with ```var```.
 
       Example usage: ```query term "a" concat var "s" concat term "b" concat var "s" ;```
 

@@ -5,6 +5,14 @@ import pytest
 @pytest.mark.parametrize( "test_input, expected", [
     ( 
         '''
+        connect "azat/home/db" ; 
+        select edges 
+            from query term "s" star alt term "b" plus concat term "c" opt ;
+        ''', 
+        True
+    ), 
+    ( 
+        '''
         select edges from name "sparsegraph" ;
         ''', 
         True
@@ -18,7 +26,7 @@ import pytest
     ( 
         '''
         connect "azat/home/db" ; 
-        select edges from name "sparsegraph" ;
+        select edges from name "sparsegraph_256.txt" ;
         ''', 
         True
     ),
@@ -52,7 +60,7 @@ import pytest
         '''
         connect "azat/home/db" ; 
         select filter edges with 
-            ( u, l, v ) satisfies labelIs "ar" and ( isStart u and isFinal v ) 
+            ( u, l, v ) satisfies l labelIs "ar" or ( isStart u and isFinal v ) 
                     from name "sparsegraph" ;
         ''', 
         True
@@ -61,24 +69,16 @@ import pytest
         '''
         connect "azat/home/db" ; 
         select filter edges with 
-            ( u, l, v ) satisfies labelIs "ar" and isStart u 
-                    from name "sparsegraph" ;
+            ( u, l, v ) satisfies l labelIs "ar" and isStart u 
+                    from name "sparsegraph.txt" ;
         ''', 
         True
-    ),
+    ),   
     ( 
         '''
         connect "azat/home/db" ; 
         select edges 
-            from query term "s" star alt term "b" plus concat term "c" opt;
-        ''', 
-        True
-    ),    
-    ( 
-        '''
-        connect "azat/home/db" ; 
-        select edges 
-            from query term "a" star alt ( term opt concat term "c" plus ) ;
+            from query term "a" star alt ( term "b" opt concat term "c" plus ) ;
         ''', 
         True
     ),
@@ -96,7 +96,7 @@ import pytest
         connect "home/db" ;
         select count edges
             from startAndFinal ( set 1 2 3, set 4 5 6 )
-                of name "fullgraph" intersect query term "a" star term "b" ;
+                of name "fullgraph" intersect query term "a" star concat term "b" ;
         ''',
         True
     ),
@@ -111,6 +111,20 @@ import pytest
         ''', 
         True
     ),
+     ( 
+        '''
+        connect "azat/home/db" ; 
+        define 
+            term "a" concat var "s" concat term "b" concat var "s"
+        as "s" ;
+        define
+            term "a" concat var "s1" concat term "b"
+        as "s1" ;
+        select edges 
+            from name "sparsegraph256.txt" ;
+        ''', 
+        True
+    ),   
     ( 
         '''
         connect "azat/home/db" ; 
@@ -165,6 +179,15 @@ import pytest
         connect "azat/home/db" ; 
         select edges 
             from query "a" star alt "a" opt concat "c" plus ;
+        ''', 
+        False
+     ),
+    # string includes special character +
+    ( 
+        '''
+        connect "azat/home/db" ; 
+        select edges 
+            from query "a+" star alt "a" opt concat "c" plus ;
         ''', 
         False
      )
