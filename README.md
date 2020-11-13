@@ -92,10 +92,11 @@ Statements in the script should be separated with ``` ; ```. Description of the 
   **```GRAPH``` expression can be one of:**
     - ```name [GRAPH NAME]```
     - ```query [PATTERN]```
-      - ```PATTERN``` is a user-defined reqular expression.
-      Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon should be ```ptEps```. Terminals should be preceded with ```term``` keyword, nonterminals - with ```var```.
+      - ```PATTERN``` represesnts a non-empty user-defined reqular expression.
+      Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon is ```ptEps```. Terminals should be preceded with ```term``` keyword, nonterminals - with ```var```.
 
-      Example usage: 
+      Example usage: ```query term "a" concat var "s" concat term "b" concat var "s" ;```
+
     - ```[GRAPH EXPRESSION] intersect [GRAPH EXPRESSION] ``` - intersection of graph automata
     - ```startAndFinal [VERTICES] [VERTICES] of [GRAPH EXPRESSION]``` - specifies start and final vertices for the graph or graph expression
       -  ```VERTICES``` can be specified as a set of numbers (```set 1 2 3 4 ...```) or as a range: ```range ( start , end )```
