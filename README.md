@@ -35,7 +35,7 @@ Test with ```python3 -m pytest```
 
 ## Assignment_3
 
-Experimental report can be found in Analysis.pdf. CSV files used in analysis are in ./query_benchmarks.
+Experimental report can be found in ```RPQAnalysis.pdf```. CSV files used in analysis are in ./query_benchmarks.
 
 ## Assignment_4
 
@@ -54,6 +54,10 @@ S (a S b)*
 ```
 
 All variables should be uppercase, terminals - lowercase.
+
+## Assignment_6
+
+Experimental report with different CFPQ algorithms can be found in ```CFPQAnalysis.pdf```. The plots were generated using the Seaborn library, algorithms were launched with ```timeout 30m``` shell command, to avoid hanging benchmarks on one iteration.
 
 ## Assignment_7: Graph DB Query Language Syntax
 
@@ -110,3 +114,4 @@ Description of the possible database statements:
       -  ```VERTICES``` can be specified as a set of numbers (```set 1 2 3 4 ...```) or as a range: ```range ( start , end )```
 
 - ```define [PATTERN] as [PATTERN NAME] of [GRAPH EXPRESSION]``` - this statement should be used to define named patterns to build grammar productions.
+
