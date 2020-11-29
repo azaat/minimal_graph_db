@@ -55,7 +55,63 @@ S (a S b)*
 
 All variables should be uppercase, terminals - lowercase.
 
-
 ## Assignment_6
 
 Experimental report with different CFPQ algorithms can be found in ```CFPQAnalysis.pdf```. The plots were generated using the Seaborn library, algorithms were launched with ```timeout 30m``` shell command, to avoid hanging benchmarks on one iteration.
+
+## Assignment_7: Graph DB Query Language Syntax
+
+### Syntax documentation
+
+Statements in the script should be separated with ``` ; ```, tokens and keywords - with arbitrary amount of whitespace. Strings are defined like this: ```"example_string"```, supported string characters: (```/```, ```.```, ```_```, ```0-9```, ```a-z```)
+. Int type describes natural numbers. 
+
+Description of the possible database statements:
+- ```connect [PATH]``` - connects to the database with the specified path, path should be of string type.
+  Example usage:
+  ```
+  connect "azat/home/db" ;
+  ```
+
+- ```select [TARGET] from [GRAPH]``` - selects specified target from the graph or graph expression.
+
+  **Possible ```[TARGET]``` values:**
+  - ```edges``` - if you need to select a set of edges
+  - ```filter [EDGE EXPRESSION] with [PREDICATE]``` - if you need to filter edges with some predicate. Edge expression can be either ```edges``` or filter of edges.
+
+    - Predicate format:
+      ```satisfies [BOOLEAN EXPRESSION]```
+      For the triple (v, label, u) returns boolean value for a combination of boolean predicates of the form:
+
+      ```
+      isStart [VERTEX NAME]
+      isFinal [VERTEX NAME]
+      labelIs [LABEL NAME]
+      ```
+      where isStart, isFinal return whether vertex is start or final. Vertex and variable names should start with letter character, the rest of the name can contain numbers.
+
+      Combined expressions with these predicates can be specified with ```and```, ```or```,  ```not```.
+
+      Example usage:
+      ```
+      select filter edges with 
+            ( u, l, v ) satisfies l labelIs "ar" or ( isStart u and isFinal v ) 
+                    from name "sparsegraph" ;
+      ```
+
+  - ```count [EDGE EXPRESSION]``` - if you need to select the count of edges. Edge expression can be either ```edges``` or filter of edge expression.
+  
+  **```GRAPH``` expression can be one of:**
+    - ```name [GRAPH NAME]```
+    - ```query [PATTERN]```
+      - ```PATTERN``` represesnts a non-empty user-defined reqular expression.
+      Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon is ```ptEps```. Both terminals and nonterminals are defined asTerminals are preceded with ```term``` keyword, nonterminals - with ```var```.
+
+      Example usage: ```query term "a" concat var "s" concat term "b" concat var "s" ;```
+
+    - ```[GRAPH EXPRESSION] intersect [GRAPH EXPRESSION] ``` - intersection of graph automata
+    - ```startAndFinal [VERTICES] [VERTICES] of [GRAPH EXPRESSION]``` - specifies start and final vertices for the graph or graph expression
+      -  ```VERTICES``` can be specified as a set of numbers (```set 1 2 3 4 ...```) or as a range: ```range ( start , end )```
+
+- ```define [PATTERN] as [PATTERN NAME] of [GRAPH EXPRESSION]``` - this statement should be used to define named patterns to build grammar productions.
+

@@ -25,6 +25,11 @@ def test_2_accepts():
     assert cnf.contains('abab')
     assert cnf.contains('ab')
 
+def test_3_accepts():
+    cnf = GrammarCNF.from_text('S -> \( S \) | eps')
+    assert cnf.contains('()')
+    assert cnf.contains('(())')
+
 
 def test_2_epsilon_not_accepts():
     cnf = GrammarCNF.from_text(TEST_GRAMMARS[1])
