@@ -125,5 +125,5 @@ Minor **syntax updates**:
     ```
 3. Set syntax: ```set(1,2,3,5)```
 
-Install antlr, then run ```conda install -c conda-forge antlr-python-runtime ```
+To use antlr_parser.py, install antlr, then run ```conda install -c conda-forge antlr-python-runtime ```
 
