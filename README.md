@@ -110,3 +110,20 @@ Description of the possible database statements:
       -  ```VERTICES``` can be specified as a set of numbers (```set 1 2 3 4 ...```) or as a range: ```range ( start , end )```
 
 - ```define [PATTERN] as [PATTERN NAME] of [GRAPH EXPRESSION]``` - this statement should be used to define named patterns to build grammar productions.
+
+## Asssignment 8
+
+Minor **syntax updates**:
+
+1. In the patterns ```term "a"```, ```var "b"``` should now be used as ```term("a")```, ```var("b")```. Same with ```labelIs, isFinal, isStart``` predicates (e.g. ```isStart(u)```)
+2. Now you can also specify regex pattern with characters  ```+, ?, *, .```, examples: 
+    ```
+    term("a").var("s").term("b").var("s")
+    
+    define term("a")*.term("b")?.var("s")+ as "my_pattern" ;
+    
+    ```
+3. Set syntax: ```set(1,2,3,5)```
+
+Install antlr, then run ```conda install -c conda-forge antlr-python-runtime ```
+
