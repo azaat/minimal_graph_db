@@ -91,7 +91,7 @@ Description of the possible database statements:
       Example usage:
       ```
       select filter edges with 
-            ( u, l, v ) satisfies l labelIs "ar" or ( isStart u and isFinal v ) 
+            ( u, l, v ) satisfies labelIs "ar" or ( isStart u and isFinal v ) 
                     from name "sparsegraph" ;
       ```
 
