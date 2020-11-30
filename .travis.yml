@@ -26,4 +26,5 @@ install:
 # command to run tests
 script:
   - cd ./antlr && antlr4 -Dlanguage=Python3 DbQlGrammar.g4
+  - cd ../
   - python3 -m pytest
