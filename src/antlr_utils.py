@@ -6,7 +6,6 @@ from antlr4.tree.Trees import Trees
 
 from antlr.DbQlGrammarLexer import DbQlGrammarLexer
 from antlr.DbQlGrammarParser import DbQlGrammarParser
-from antlr.TraversalListener import TraversalListener
 from graphviz import Digraph
 
 
