@@ -133,7 +133,7 @@ Antlr grammar tests in CI are running on updated syntax.
 2. Run ```cd ./antlr``` in this repo's root
 2. Generate ```.py``` files in that directory with ```antlr4 -Dlanguage=Python3 DbQlGrammar.g4```
 
-####DOT visualization:
+#### DOT visualization:
 
 DOT visualization is implemented using python antlr runtime (by generated tree traversal).
 Use ```src.script_to_dot``` tool for this, usage:
