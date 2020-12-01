@@ -14,3 +14,6 @@ __pycache__/
 .eggs/
 
 cfpq_benchmarks/
+.idea/
+
+*.jar

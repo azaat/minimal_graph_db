@@ -95,7 +95,7 @@ Description of the possible database statements:
       Example usage:
       ```
       select filter edges with 
-            ( u, l, v ) satisfies l labelIs "ar" or ( isStart u and isFinal v ) 
+            ( u, l, v ) satisfies labelIs "ar" or ( isStart u and isFinal v ) 
                     from name "sparsegraph" ;
       ```
 
@@ -104,7 +104,7 @@ Description of the possible database statements:
   **```GRAPH``` expression can be one of:**
     - ```name [GRAPH NAME]```
     - ```query [PATTERN]```
-      - ```PATTERN``` represesnts a non-empty user-defined reqular expression.
+      - ```PATTERN``` represents a non-empty user-defined reqular expression.
       Supported operators are ```alt``` -alternative, ```plus``` - one or more occurences, ```star``` - * operator, ```opt``` - optional character. User-defined epsilon is ```ptEps```. Both terminals and nonterminals are defined asTerminals are preceded with ```term``` keyword, nonterminals - with ```var```.
 
       Example usage: ```query term "a" concat var "s" concat term "b" concat var "s" ;```
@@ -115,3 +115,40 @@ Description of the possible database statements:
 
 - ```define [PATTERN] as [PATTERN NAME] of [GRAPH EXPRESSION]``` - this statement should be used to define named patterns to build grammar productions.
 
+## Asssignment 8: ANTLR parser for Graph DB Query Language
+
+#### Minor **syntax updates**:
+
+1. In the patterns ```term "a"```, ```var "b"``` should now be used as ```term("a")```, ```var("b")```. Same with ```labelIs, isFinal, isStart``` predicates (e.g. ```isStart(u)```)
+2. Now you can also specify regex pattern with characters  ```+, ?, *, .```, examples: 
+    ```
+    term("a").var("s").term("b").var("s")
+    
+    define term("a")*.term("b")?.var("s")+ as "my_pattern" ;
+    
+    ```
+3. Set syntax: ```set(1,2,3,5)```
+
+Antlr grammar tests in CI are running on updated syntax.
+
+#### To use antlr_parser.py:
+
+1. Install [antlr](https://www.antlr.org/)
+2. Run ```cd ./antlr``` in this repo's root
+2. Generate ```.py``` files in that directory with ```antlr4 -Dlanguage=Python3 DbQlGrammar.g4```
+
+#### DOT visualization:
+
+DOT visualization is implemented using python antlr runtime (by generated tree traversal).
+Use ```src.script_to_dot``` tool for this, usage:
+
+```
+python3 -m script_to_dot.py [-h] --script [PATH_TO_SCRIPT_FILE] --output [PATH_TO_DESIRED_OUTPUT] [--view]
+
+    --view     optional, the tool opens visual representation if option is present
+```
+
+Example usage: 
+```
+python3 -m src.script_to_dot --script ./antlr/example_scripts/example.txt --output example.gv --view
+```
