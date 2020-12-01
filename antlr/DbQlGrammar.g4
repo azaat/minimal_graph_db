@@ -18,7 +18,7 @@ graph_t : QUERY pattern
         ;
 
 vertices : SET LBR set_expr RBR
-         | RANGE LBR INT COMMA RBR 
+         | RANGE LBR INT COMMA INT RBR
          | /* epsilon */
          ;
 

@@ -1,5 +1,5 @@
 import os
-from src.antlr_parser import parse
+from src.antlr_utils import parse
 from src.grammar_cnf import GrammarCNF
 import pytest
 
@@ -99,6 +99,15 @@ import pytest
         connect "home/db" ;
         select count edges
             from startAndFinal(set(1, 2, 3), set(4, 5, 6))
+                of name "fullgraph" intersect query term("a") star concat term("b");
+        ''',
+            True
+    ),
+(
+            '''
+        connect "home/db" ;
+        select count edges
+            from startAndFinal(range(1, 3), set(4, 5, 6))
                 of name "fullgraph" intersect query term("a") star concat term("b");
         ''',
             True
