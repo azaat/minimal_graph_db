@@ -1,4 +1,4 @@
-# SPbU Formal Languages Course assignments
+# Minimal graph DB - SPbU Formal Languages Course project
 [![Build Status](https://travis-ci.org/azaat/formal_languages_course.svg?branch=master)](https://travis-ci.org/azaat/formal_languages_course)
 
 ## Assignment 1
